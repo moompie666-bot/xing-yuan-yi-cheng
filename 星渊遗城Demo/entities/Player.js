@@ -31,10 +31,10 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
         this._baseScale = ENTITY_SCALE.PLAYER;
         this.setScale(this._baseScale);
         this.setCollideWorldBounds(true);
-        // body.setSize 参数是原始纹理像素（1024），不受 setScale 影响
-        // 设为接近全尺寸，让碰撞体覆盖整个显示区域
-        this.body.setSize(900, 960);
-        this.body.setOffset(62, 40);   // 居中对齐
+        // 玩家图片1024×1024，显示56px，碰撞体约角色轮廓55%
+        // 1024 * 0.55 = 563，水平再收窄一些让手感更好
+        this.body.setSize(480, 720);
+        this.body.setOffset(272, 200);
         this.setMaxVelocity(600, 800);
 
         // ---- 状态 ----
@@ -92,21 +92,6 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
         this._legL.setDepth(DEPTH.PLAYER - 1);
         this._legR.setDepth(DEPTH.PLAYER - 1);
         this._legTime = 0;
-
-        // ---- 程序化手部动画 ----
-        // 主武器手（右手/左手，持剑）：粗短矩形
-        this._armWeapon = scene.add.rectangle(x, y, 6, 14, COLORS.PLAYER_CORE, 0.9);
-        this._armWeapon.setDepth(DEPTH.PLAYER + 1);
-        // 剑刃（从武器手延伸的细长矩形）
-        this._sword = scene.add.rectangle(x, y, 3, 22, COLORS.NEON_CYAN, 0.85);
-        this._sword.setDepth(DEPTH.PLAYER + 1);
-        // 副手（左手/右手）：辅助平衡臂
-        this._armOff = scene.add.rectangle(x, y, 5, 10, COLORS.PLAYER_BODY, 0.7);
-        this._armOff.setDepth(DEPTH.PLAYER - 1);
-        // 武器能量光效（剑尖高亮圆点）
-        this._swordTip = scene.add.circle(x, y, 3, COLORS.NEON_CYAN, 0.9);
-        this._swordTip.setDepth(DEPTH.PLAYER + 2);
-        this._armTime = 0; // 待机摇摆计时
     }
 
     // ----------------------------------------------------------------
@@ -217,8 +202,6 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
 
         // 腿部动画更新
         this._updateLegs(time, delta);
-        // 手部动画更新
-        this._updateArms(time, delta);
     }
 
     // ----------------------------------------------------------------
@@ -306,65 +289,7 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
         this._legR.setFillStyle(legColor);
     }
 
-    // ----------------------------------------------------------------
-    // 程序化手部/武器动画
-    // ----------------------------------------------------------------
-    _updateArms(time, delta) {
-        if (!this._armWeapon || !this._sword) return;
-
-        const bs = this._baseScale;
-        const px = this.x;
-        const py = this.y;
-        const dir = this.facingRight ? 1 : -1;
-
-        // 角色身体中心偏上（胸部位置）
-        const bodyW = 1024 * bs * 0.28;
-        const bodyH = 1024 * bs * 0.5;
-
-        // 是否可见
-        const isVisible = this.state !== S.DEAD && this.alpha > 0.1;
-        [this._armWeapon, this._sword, this._armOff, this._swordTip].forEach(obj => {
-            if (obj) obj.setVisible(isVisible).setAlpha(isVisible ? this.alpha * 0.9 : 0);
-        });
-        if (!isVisible) return;
-
-        this._armTime += delta;
-
-        // ---- 武器手位置基准（身体侧前方）----
-        const wBaseX = px + dir * bodyW * 0.55;
-        const wBaseY = py - bodyH * 0.05;
-
-        // ---- 副手位置基准（对侧，后方）----
-        const oBaseX = px - dir * bodyW * 0.45;
-        const oBaseY = py - bodyH * 0.08;
-
-        switch (this.state) {
-            case S.IDLE: {
-                // 待机：持剑斜向下，微微前倾呼吸感
-                const breathe = Math.sin(this._armTime / 700) * 0.06;
-                const swordRot = dir * (0.35 + breathe);
-
-                this._armWeapon.setPosition(wBaseX, wBaseY + 4);
-                this._armWeapon.setRotation(swordRot);
-                this._armWeapon.setSize(6, 14);
-
-                this._sword.setPosition(
-                    wBaseX + Math.sin(swordRot) * 14,
-                    wBaseY + 4 + Math.cos(swordRot) * 10
-                );
-                this._sword.setRotation(swordRot);
-                this._sword.setSize(3, 22);
-
-                this._swordTip.setPosition(
-                    wBaseX + Math.sin(swordRot) * 24,
-                    wBaseY + 4 + Math.cos(swordRot) * 18
-                );
-
-                this._armOff.setPosition(oBaseX, oBaseY + 2);
-                this._armOff.setRotation(-dir * 0.18 + breathe);
-                this._armOff.setSize(5, 10);
-                break;
-            }
+    _updateArms() {}
 
             case S.RUN: {
                 // 跑步：手臂前后摆动，剑跟随
@@ -1283,9 +1208,5 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
         this.bullets.clear(true, true);
         if (this._legL) { this._legL.destroy(); this._legL = null; }
         if (this._legR) { this._legR.destroy(); this._legR = null; }
-        if (this._armWeapon) { this._armWeapon.destroy(); this._armWeapon = null; }
-        if (this._sword)     { this._sword.destroy();     this._sword = null; }
-        if (this._armOff)    { this._armOff.destroy();    this._armOff = null; }
-        if (this._swordTip)  { this._swordTip.destroy();  this._swordTip = null; }
     }
 }

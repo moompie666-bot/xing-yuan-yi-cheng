@@ -15,8 +15,8 @@ export class MeleeEnemy extends Phaser.Physics.Arcade.Sprite {
         this.setDepth(DEPTH.ENEMIES);
         this._baseScale = ENTITY_SCALE.ENEMY_MELEE;
         this.setScale(this._baseScale);
-        this.body.setSize(900, 960);
-        this.body.setOffset(62, 40);
+        this.body.setSize(560, 700);
+        this.body.setOffset(232, 162);
         this.setCollideWorldBounds(true);
 
         this.hp = ENEMY.MELEE.HP;

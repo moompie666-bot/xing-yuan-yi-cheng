@@ -120,12 +120,13 @@ export class Room3Scene extends BaseRoomScene {
             });
         });
 
-        // ---- 接触伤害（玩家 vs 敌人）----
+        // ---- 接触伤害（距离检测，避免大body误触）----
         this.enemies.forEach(e => {
-            if (!e.active || e.state === 'dead' || !e.body) return;
+            if (!e.active || e.state === 'dead') return;
             const timer = this._contactDamageTimers.get(e) || 0;
             if (timer > 0) return;
-            if (this._rectOverlap(player, e)) {
+            const dist = Phaser.Math.Distance.Between(player.x, player.y, e.x, e.y);
+            if (dist < 36) {
                 const dir = player.x < e.x ? -1 : 1;
                 player.takeDamage(e.damage, dir);
                 this._contactDamageTimers.set(e, 600);

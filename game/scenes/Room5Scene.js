@@ -123,9 +123,11 @@ export class Room5Scene extends BaseRoomScene {
             });
         }
 
-        // ---- Boss 接触伤害（手动检测）----
+        // ---- Boss 接触伤害（距离检测，避免body边缘误触）----
         if (this.boss.active && this.boss.state !== 'dead' && this._bossContactTimer <= 0) {
-            if (this._rectOverlap(player, this.boss)) {
+            const dist = Phaser.Math.Distance.Between(player.x, player.y, this.boss.x, this.boss.y);
+            const threshold = 48; // 玩家28px + Boss40px = 68px，设48更紧凑
+            if (dist < threshold) {
                 const dir = player.x < this.boss.x ? -1 : 1;
                 const dmg = this.boss.state === 'charge' ? BC.CHARGE_DAMAGE : 15;
                 player.takeDamage(dmg, dir);

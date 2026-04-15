@@ -16,8 +16,8 @@ export class FlyingEnemy extends Phaser.Physics.Arcade.Sprite {
         this._baseScale = ENTITY_SCALE.ENEMY_FLYING;
         this.setScale(this._baseScale);
         this.body.setAllowGravity(false);
-        this.body.setSize(900, 900);
-        this.body.setOffset(62, 62);
+        this.body.setSize(500, 500);
+        this.body.setOffset(262, 262);
         this.setCollideWorldBounds(true);
 
         this.hp = ENEMY.FLYING.HP;

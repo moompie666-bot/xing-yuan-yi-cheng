@@ -29,8 +29,10 @@ export class Boss extends Phaser.Physics.Arcade.Sprite {
         this.setDepth(DEPTH.ENEMIES);
         this._baseScale = ENTITY_SCALE.BOSS;
         this.setScale(this._baseScale);
-        this.body.setSize(900, 950);
-        this.body.setOffset(62, 40);
+        // Boss 图片1024×1024，显示约80px，碰撞体设为实际角色轮廓的约55%
+        // 即 1024 * 0.55 = 563，居中偏移 (1024-563)/2 ≈ 230
+        this.body.setSize(560, 700);
+        this.body.setOffset(232, 200);
         this.setCollideWorldBounds(true);
         this.body.setMaxVelocity(500, 800);
 
