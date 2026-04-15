@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>星渊遗城 Demo</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background: #050510;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            overflow: hidden;
+            font-family: 'Courier New', monospace;
+        }
+        #game-container {
+            position: relative;
+            border: 1px solid #222244;
+            box-shadow: 0 0 40px rgba(68, 204, 255, 0.15);
+        }
+        canvas { display: block; }
+    </style>
+</head>
+<body>
+    <div id="game-container"></div>
+    <!-- Phaser 3.60+ CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/phaser@3.60.0/dist/phaser.min.js"></script>
+    <script type="module" src="main.js"></script>
+</body>
+</html>
