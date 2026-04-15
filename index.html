@@ -2,14 +2,43 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="refresh" content="0; url=game/index.html">
     <title>星渊遗城 Demo</title>
     <style>
-        body { background: #0a0a1a; color: #44ccff; font-family: 'Courier New', monospace;
-               display: flex; align-items: center; justify-content: center; height: 100vh; margin: 0; }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background: #050510;
+            display: flex; flex-direction: column;
+            align-items: center; justify-content: center;
+            height: 100vh; font-family: 'Courier New', monospace;
+            color: #44ccff;
+        }
+        h1 { font-size: 2rem; letter-spacing: 6px; margin-bottom: 12px;
+             text-shadow: 0 0 20px #44ccff88; }
+        p  { color: #667799; margin-bottom: 40px; font-size: 0.9rem; letter-spacing: 2px; }
+        a  {
+            display: inline-block;
+            padding: 14px 48px;
+            border: 2px solid #44ccff;
+            color: #44ccff;
+            text-decoration: none;
+            font-size: 1.1rem;
+            letter-spacing: 4px;
+            transition: all 0.2s;
+            box-shadow: 0 0 18px #44ccff44;
+        }
+        a:hover {
+            background: #44ccff22;
+            box-shadow: 0 0 32px #44ccff88;
+        }
     </style>
 </head>
 <body>
-    <p>正在跳转... <a href="game/index.html" style="color:#44ccff">点击这里进入游戏</a></p>
+    <h1>星渊遗城</h1>
+    <p>XING YUAN YI CHENG · DEMO</p>
+    <a href="game/index.html">▶ 开始游戏</a>
+    <script>
+        // 自动跳转，2秒后进入游戏
+        setTimeout(() => { window.location.href = 'game/index.html'; }, 800);
+    </script>
 </body>
 </html>
